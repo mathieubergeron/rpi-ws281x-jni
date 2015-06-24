@@ -24,3 +24,11 @@ gcc -I"/path/to/rpi_ws281x" \
     -fPIC org_ws281x_Ws281xLibrary.c \
     -L"/path/to/rpi_ws281x" -lws2811
 ```
+
+TODO
+====
+
++ automatic build process
+  + compile libws2811.so
+  + compile libws2811jni.so
+  + bundle JAR with libs
