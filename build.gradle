@@ -1,0 +1,23 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+sourceCompatibility = 1.7
+version = "0.0.0"
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'ws2811jni',
+                   'Implementation-Version': version,
+                   'Main-Class': 'org.ws2811.Test'
+    }
+}
+
+mainClassName = "org.ws2811.Test"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+}
