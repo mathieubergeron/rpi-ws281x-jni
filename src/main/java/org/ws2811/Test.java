@@ -9,12 +9,12 @@ public class Test {
     public static void main(String[] args) throws InterruptedException {
         int[] leds = new int[PIXEL_COUNT];
         long reference = Ws2811Library.init(FREQUENCY, DMA_NUMBER, new Ws2811Channel(GPIO_NUMBER, 0, PIXEL_COUNT, 255));
-        
+
         if (reference <= 0) {
             System.out.println("Could not initialize ws2811 device...");
             return;
         }
-        
+
         try {
             for (int i = 0; i < 10; i++) {
                 setAll(leds, 0xFFFFFF);

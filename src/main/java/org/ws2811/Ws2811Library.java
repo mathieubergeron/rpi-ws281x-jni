@@ -9,7 +9,7 @@ public final class Ws2811Library {
         Ws2811Channel[] channels = new Ws2811Channel[]{channel, null};
         return init(frequency, dmanum, channels);
     }
-    
+
     public static int render(long reference, int[] leds) {
         return render(reference, 0, leds);
     }
