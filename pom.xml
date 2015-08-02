@@ -9,6 +9,10 @@
     <packaging>nar</packaging>
     <name>ws2811-jni</name>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -31,6 +35,7 @@
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <mainClass>org.ws2811.Test</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -79,7 +84,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Copying shared library so it is included in final jar file
+            <!-- Copying shared library so it is included in final jar file 
                 under /lib/ folder -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -92,12 +97,12 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/classes/lib/</outputDirectory>
+                            <outputDirectory>${basedir}/target/classes/lib</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>target/nar/ws2811-jni-0.0.1-arm-Linux-gpp-jni/lib/arm-Linux-gpp/jni</directory>
+                                    <directory>target/nar/${project.artifactId}-${project.version}-arm-Linux-gpp-jni/lib/arm-Linux-gpp/jni</directory>
                                     <includes>
-                                        <include>libws2811-jni-0.0.1.so</include>
+                                        <include>lib${project.artifactId}-${project.version}.so</include>
                                     </includes>
                                 </resource>
                             </resources>
