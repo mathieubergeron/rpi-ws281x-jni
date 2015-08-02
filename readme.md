@@ -21,17 +21,12 @@ cp *.h /usr/include/ws2811
 ```
 git clone git@github.com:mathieubergeron/rpi-ws281x-jni.git
 cd rpi-ws281x-jni
-gcc -I"/usr/include/ws2811" \
-    -I"$JAVA_HOME/include" \
-    -I"$JAVA_HOME/include/linux" \
-    -Wall -shared -o libws2811jni.so \
-    -fPIC src/main/c/ws2811jni.c \
-    -lws2811
+mvn package
+java -classpath target/ws2811-jni-0.0.1.jar org.ws2811.Test
 ```
 
 TODO
 ====
-
-+ automatic build process
-  + compile libws2811jni.so
-  + bundle JAR with libs
++ clean up *copy-resources* task in pom.xml
++ include main file in manifest.mf
++ skip `nar` file creation given that i don't use them
