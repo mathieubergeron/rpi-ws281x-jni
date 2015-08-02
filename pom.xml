@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.scijava</groupId>
             <artifactId>native-lib-loader</artifactId>
-            <version>2.0.2</version>
+            <version>2.1.0</version>
         </dependency>
     </dependencies>
 
@@ -40,7 +40,6 @@
                     <libraries>
                         <library>
                             <type>jni</type>
-                            <narSystemPackage>org.ws2811.nar</narSystemPackage>
                             <linkCPP>false</linkCPP>
                         </library>
                     </libraries>
@@ -69,6 +68,31 @@
                         </libs>
                     </linker>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/classes/META-INF/lib/linux_arm/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>target/nar/ws2811-jni-0.0.1-arm-Linux-gpp-jni/lib/arm-Linux-gpp/jni</directory>
+                                    <includes>
+                                        <include>libws2811-jni-0.0.1.so</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

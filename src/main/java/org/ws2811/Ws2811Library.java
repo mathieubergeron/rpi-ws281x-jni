@@ -2,7 +2,7 @@ package org.ws2811;
 
 public final class Ws2811Library {
     static {
-        System.loadLibrary("ws2811jni");
+        NativeLibraryUtil.loadNativeLibrary(Ws2811Library.class, "ws2811-jni-0.0.1");
     }
 
     public static long init(int frequency, int dmanum, Ws2811Channel channel) {
