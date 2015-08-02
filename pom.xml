@@ -2,19 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>org.ws2811</groupId>
     <artifactId>ws2811-jni</artifactId>
-    <packaging>nar</packaging>
     <version>0.0.1</version>
+    <packaging>nar</packaging>
     <name>ws2811-jni</name>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.scijava</groupId>
-            <artifactId>native-lib-loader</artifactId>
-            <version>2.1.0</version>
-        </dependency>
-    </dependencies>
 
     <build>
         <plugins>
@@ -28,6 +21,22 @@
                 </configuration>
             </plugin>
 
+            <!-- To include Implementation and Specification entries in MANIFEST.MF -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!-- C source build configuration -->
             <plugin>
                 <groupId>com.github.maven-nar</groupId>
                 <artifactId>nar-maven-plugin</artifactId>
@@ -70,6 +79,8 @@
                 </configuration>
             </plugin>
 
+            <!-- Copying shared library so it is included in final jar file
+                under /lib/ folder -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.7</version>
@@ -81,7 +92,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/classes/META-INF/lib/linux_arm/</outputDirectory>
+                            <outputDirectory>${basedir}/target/classes/lib/</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>target/nar/ws2811-jni-0.0.1-arm-Linux-gpp-jni/lib/arm-Linux-gpp/jni</directory>

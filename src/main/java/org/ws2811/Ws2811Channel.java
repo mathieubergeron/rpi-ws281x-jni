@@ -1,6 +1,6 @@
 package org.ws2811;
 
-public final class Ws2811Channel {
+public class Ws2811Channel {
     private final int mGpio;
     private final int mInvert;
     private final int mCount;

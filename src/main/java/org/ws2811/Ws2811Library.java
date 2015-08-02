@@ -1,9 +1,13 @@
 package org.ws2811;
 
+
 public final class Ws2811Library {
     static {
-        NativeLibraryUtil.loadNativeLibrary(Ws2811Library.class, "ws2811-jni-0.0.1");
+        NativeLibraryLoader.load();
     }
+
+    // Prevent instantiation
+    private Ws2811Library() {}
 
     public static long init(int frequency, int dmanum, Ws2811Channel channel) {
         Ws2811Channel[] channels = new Ws2811Channel[]{channel, null};
