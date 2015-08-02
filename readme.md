@@ -22,11 +22,5 @@ cp *.h /usr/include/ws2811
 git clone git@github.com:mathieubergeron/rpi-ws281x-jni.git
 cd rpi-ws281x-jni
 mvn package
-java -classpath target/ws2811-jni-0.0.1.jar org.ws2811.Test
+java -jar target/ws2811-jni-VERSION.jar
 ```
-
-TODO
-====
-+ clean up *copy-resources* task in pom.xml
-+ include main file in manifest.mf
-+ skip `nar` file creation given that i don't use them
