@@ -1,7 +1,7 @@
 package org.ws2811;
 
 
-public final class Ws2811Library {
+final class Ws2811Library {
     static {
         NativeLibraryLoader.load();
     }
