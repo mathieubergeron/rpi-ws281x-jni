@@ -83,7 +83,7 @@ public class SingleChannelWs2811 {
     }
 
     public void setValue(int pixelNumber, int red, int green, int blue) {
-        mLog.trace("Setting pixel number %d to R=%d, G=%d, B=%d", pixelNumber, red, green, blue);
+        mLog.trace("Setting pixel number index {} to R={}, G={}, B={}", pixelNumber, red, green, blue);
 
         checkIndex(pixelNumber, mChannel.getCount(), PIXEL_NUMBER_NAME);
         red = checkColorValue(red, RED_NAME) << 16;
