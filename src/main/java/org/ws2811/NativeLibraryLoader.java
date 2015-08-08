@@ -1,45 +1,37 @@
 package org.ws2811;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.io.*;
+import java.nio.file.*;
+
+import org.slf4j.*;
 
 final class NativeLibraryLoader {
-    private final static String LIB_NAME = "libws2811-jni";
-
+    private static final String LIB_NAME = "libws2811-jni";
+    private static final Logger LOGGER = LoggerFactory.getLogger(NativeLibraryLoader.class);
     private static boolean mAlreadyLoaded;
 
     // prevent instantiation
     private NativeLibraryLoader() {}
 
     public static synchronized void load() {
-
         if (mAlreadyLoaded) {
+            LOGGER.debug("Library [{}] is already loaded");
             return;
         }
         // There's no reason putting this back if false, even if it fails.
         mAlreadyLoaded = true;
 
         // Constructing file name
-        String fileName = LIB_NAME;
         String version = Ws2811Library.class.getPackage().getImplementationVersion();
-        if (null != version && version.length() > 0) {
-            fileName += "-" + version;
-        }
-        fileName += ".so";
-
+        String fileName = LIB_NAME + "-" + version + ".so";
         String path = "/lib/" + fileName;
-        System.out.println("Attempting to load [" + fileName + "] using path: [" + path + "]");
+
+        LOGGER.debug("Attempting to extract and load [{}] from jar", path);
         try {
             loadLibraryFromClasspath(path);
-            System.out.println("Library [" + fileName + "] loaded successfully using embedded resource file: [" + path + "]");
-        } catch (Exception | UnsatisfiedLinkError e) {
-            System.out.println("Unable to load [" + fileName + "] using path: [" + path + "]");
+            LOGGER.debug("Library [{}] loaded successfully", fileName);
+        } catch (Exception | UnsatisfiedLinkError error) {
+            LOGGER.error("Unable to load [{}] using path: [{}]", fileName, path, error);
         }
     }
 
@@ -57,9 +49,7 @@ final class NativeLibraryLoader {
         targetFile.deleteOnExit();
 
         try (InputStream source = Ws2811Library.class.getResourceAsStream(inputPath.toString())) {
-            if (source == null) {
-                throw new FileNotFoundException("File " + inputPath + " was not found in classpath.");
-            }
+            if (source == null) throw new FileNotFoundException("File " + inputPath + " was not found in classpath.");
             Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
         }
 

@@ -1,9 +1,9 @@
-package org.ws2811;
+package org.ws2811.exception;
 
 public final class RenderException extends Exception {
     private static final long serialVersionUID = 1L;
 
     public RenderException() {
-        super("Rendering failed");
+        super("Pixel rendering failed");
     }
 }

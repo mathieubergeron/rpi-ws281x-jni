@@ -34,8 +34,13 @@ Java_org_ws2811_Ws2811Library_init (JNIEnv * env, jclass jc, jint frequency, jin
             jbrightness = (*env)->CallIntMethod(env, jchannel, getBrightness);
         }
 
-        ledstring->channel[channelIndex] = (ws2811_channel_t ) { .gpionum = jgpio, .count = jcount, .invert = jinvert,
-                        .brightness = jbrightness, };
+        ledstring->channel[channelIndex] = (ws2811_channel_t )
+            {
+                .gpionum = jgpio,
+                .count = jcount,
+                .invert = jinvert,
+                .brightness = jbrightness,
+            };
     }
 
     return ws2811_init(ledstring) == 0 ? (jlong)((long) ledstring) : (jlong) 0;
