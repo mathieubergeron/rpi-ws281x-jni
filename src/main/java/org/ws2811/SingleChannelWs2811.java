@@ -1,16 +1,12 @@
 package org.ws2811;
 
+import static java.lang.String.*;
 import static org.ws2811.preconditions.Preconditions.*;
 
 import org.slf4j.*;
 import org.ws2811.exception.*;
 
 public class SingleChannelWs2811 {
-    private static final String PIXEL_NUMBER_NAME = "pixelNumber";
-    private static final String RED_NAME = "red";
-    private static final String GREEN_NAME = "green";
-    private static final String BLUE_NAME = "blue";
-
     public static final int DEFAULT_FREQUENCY = 800000;
     public static final int DEFAULT_DMA_NUMBER = 5;
     public static final int DEFAULT_GPIO_NUMBER = 18;
@@ -19,8 +15,7 @@ public class SingleChannelWs2811 {
 
     private final Logger mLog = LoggerFactory.getLogger(this.getClass());
     private final Ws2811Channel mChannel;
-    private final long mReference;
-    private final int[] mPixels;
+    private long mReference;
 
     /**
      * Initialize driver with default values:
@@ -56,7 +51,6 @@ public class SingleChannelWs2811 {
         positive(dmaNumber, "dmaNumber");
         notNull(channel, "channel");
 
-        mPixels = new int[channel.getCount()];
         mReference = Ws2811Library.init(frequency, dmaNumber, channel);
         mChannel = channel;
 
@@ -68,27 +62,32 @@ public class SingleChannelWs2811 {
         return mChannel;
     }
 
+    // TODO: ws2811 is not intended to be used by multiple threads, but shutdown method will probably be called
+    // by a VM shutdown hook. So, access to mReference should be thread safe. Will this cause performance issue?
     public void shutdown() {
+        try {
+            render(new int[mChannel.getCount()]);
+        } catch (RenderException exception) {
+            mLog.error("Could not turn off pixels before final shutdown", exception);
+        }
+
         Ws2811Library.fini(mReference);
+        mReference = 0;
         mLog.info("Ws2811 library shut down");
     }
 
-    public void render() throws RenderException {
-        int result = Ws2811Library.render(mReference, mPixels);
+    public void render(int[] pixels) throws RenderException {
+        int pixelCount = mChannel.getCount();
+        if (pixels.length != pixelCount)
+            throw new IllegalArgumentException(format("'pixels' length should be '%d' but is '%d'",
+                                                      pixelCount,
+                                                      pixels.length));
+
+        int result = Ws2811Library.render(mReference, pixels);
         if (result != 0) throw new RenderException();
     }
 
     public void waitCompletion() {
         Ws2811Library.waitCompletion(mReference);
-    }
-
-    public void setValue(int pixelNumber, int red, int green, int blue) {
-        mLog.trace("Setting pixel number index {} to R={}, G={}, B={}", pixelNumber, red, green, blue);
-
-        checkIndex(pixelNumber, mChannel.getCount(), PIXEL_NUMBER_NAME);
-        red = checkColorValue(red, RED_NAME) << 16;
-        green = checkColorValue(green, GREEN_NAME) << 8;
-
-        mPixels[pixelNumber] = red | green | checkColorValue(blue, BLUE_NAME);
     }
 }
