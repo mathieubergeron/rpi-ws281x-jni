@@ -27,18 +27,18 @@ mvn package
 + import & use `ws2811-jni-VERSION.jar` in your project
 
 ```java
-    public static void main(String[] args) throws Exception {
-        final Ws2811 ws2811 = new NativeWs2811(LED_COUNT);
+public static void main(String[] args) throws Exception {
+    final Ws2811 ws2811 = new NativeWs2811(LED_COUNT);
 
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                ws2811.shutdown();
-            }
-        });
-
-        while (true) {
-            ws2811.render(produceYourNextFrame());
+    Runtime.getRuntime().addShutdownHook(new Thread() {
+        @Override
+        public void run() {
+            ws2811.shutdown();
         }
+    });
+
+    while (true) {
+        ws2811.render(produceYourNextFrame());
     }
+}
 ```
