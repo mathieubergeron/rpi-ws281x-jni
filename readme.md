@@ -29,7 +29,6 @@ mvn package
 ```java
     public static void main(String[] args) throws Exception {
         final Ws2811 ws2811 = new NativeWs2811(LED_COUNT);
-        int[] pixels = new int[LED_COUNT];
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
