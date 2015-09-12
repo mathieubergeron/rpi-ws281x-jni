@@ -1,10 +1,10 @@
 rpi-ws281x-jni
 ==============
 
-This is a (**work-in-progress**) JNI library wrapper over
+This is a simple JNI library wrapper over
 [jgarff/rpi_ws281x](https://github.com/jgarff/rpi_ws281x) C library.
 
-+ compile and install [jgarff/rpi_ws281x](https://github.com/jgarff/rpi_ws281x)
++ clone, compile & install [jgarff/rpi_ws281x](https://github.com/jgarff/rpi_ws281x)
 
 ```
 git clone git@github.com:jgarff/rpi_ws281x.git
@@ -16,11 +16,30 @@ mkdir /usr/include/ws2811
 cp *.h /usr/include/ws2811
 ```
 
-+ clone rpi-ws281x-jni and compile JNI wrapper C file to a shared object library
++ clone & package
 
 ```
 git clone git@github.com:mathieubergeron/rpi-ws281x-jni.git
 cd rpi-ws281x-jni
 mvn package
-java -jar target/ws2811-jni-VERSION.jar
+```
+
++ import & use `ws2811-jni-VERSION.jar` in your project
+
+```java
+    public static void main(String[] args) throws Exception {
+        final Ws2811 ws2811 = new NativeWs2811(LED_COUNT);
+        int[] pixels = new int[LED_COUNT];
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                ws2811.shutdown();
+            }
+        });
+
+        while (true) {
+            ws2811.render(produceYourNextFrame());
+        }
+    }
 ```
