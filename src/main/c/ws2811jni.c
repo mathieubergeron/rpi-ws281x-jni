@@ -6,7 +6,7 @@
 #include "ws2811jni.h"
 
 JNIEXPORT jlong JNICALL
-Java_org_ws2811_Ws2811Library_init (JNIEnv * env, jclass jc, jint frequency, jint dmanum, jobjectArray channels) {
+Java_org_ws2811_jni_Ws2811Library_init (JNIEnv * env, jclass jc, jint frequency, jint dmanum, jobjectArray channels) {
     jclass classChannel = (*env)->FindClass(env, "org/ws2811/Ws2811Channel");
     jmethodID getGpio = (*env)->GetMethodID(env, classChannel, "getGpio", "()I");
     jmethodID getInvert = (*env)->GetMethodID(env, classChannel, "getInvert", "()I");
@@ -46,14 +46,14 @@ Java_org_ws2811_Ws2811Library_init (JNIEnv * env, jclass jc, jint frequency, jin
     return ws2811_init(ledstring) == 0 ? (jlong)((long) ledstring) : (jlong) 0;
 }
 
-JNIEXPORT void JNICALL Java_org_ws2811_Ws2811Library_fini(JNIEnv * env, jclass jc, jlong reference) {
+JNIEXPORT void JNICALL Java_org_ws2811_jni_Ws2811Library_fini(JNIEnv * env, jclass jc, jlong reference) {
     ws2811_t *ledstring = (ws2811_t*) ((long)reference);
     ws2811_fini(ledstring);
     free(ledstring);
 }
 
 JNIEXPORT jint JNICALL
-Java_org_ws2811_Ws2811Library_render (JNIEnv * env, jclass jc, jlong reference, jint channel, jintArray jleds) {
+Java_org_ws2811_jni_Ws2811Library_render (JNIEnv * env, jclass jc, jlong reference, jint channel, jintArray jleds) {
     ws2811_t *ledstring = (ws2811_t*) ((long) reference);
     jint *leds = (*env)->GetIntArrayElements(env, jleds, NULL);
     int ledCount = ledstring->channel[channel].count;
@@ -67,7 +67,7 @@ Java_org_ws2811_Ws2811Library_render (JNIEnv * env, jclass jc, jlong reference, 
 }
 
 JNIEXPORT jint JNICALL
-Java_org_ws2811_Ws2811Library_waitCompletion (JNIEnv * env, jclass jc, jlong reference) {
+Java_org_ws2811_jni_Ws2811Library_waitCompletion (JNIEnv * env, jclass jc, jlong reference) {
     ws2811_t *ledstring = (ws2811_t*) ((long) reference);
     return (jint) ws2811_wait(ledstring);
 }

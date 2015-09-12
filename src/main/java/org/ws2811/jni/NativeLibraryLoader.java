@@ -1,4 +1,4 @@
-package org.ws2811;
+package org.ws2811.jni;
 
 import java.io.*;
 import java.nio.file.*;

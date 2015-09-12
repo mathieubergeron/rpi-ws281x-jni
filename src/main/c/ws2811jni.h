@@ -13,14 +13,14 @@ extern "C" {
      * Signature: (II[Lorg/ws2811/Ws2811Channel;)J
      */
     JNIEXPORT jlong JNICALL
-    Java_org_ws2811_Ws2811Library_init (JNIEnv *, jclass, jint, jint, jobjectArray);
+    Java_org_ws2811_jni_Ws2811Library_init (JNIEnv *, jclass, jint, jint, jobjectArray);
 
     /*
      * Class:     org_ws2811_Ws2811Library
      * Method:    fini
      * Signature: (J)V
      */
-    JNIEXPORT void JNICALL Java_org_ws2811_Ws2811Library_fini
+    JNIEXPORT void JNICALL Java_org_ws2811_jni_Ws2811Library_fini
     (JNIEnv *, jclass, jlong);
 
     /*
@@ -29,7 +29,7 @@ extern "C" {
      * Signature: (JI[I)I
      */
     JNIEXPORT jint JNICALL
-    Java_org_ws2811_Ws2811Library_render (JNIEnv *, jclass, jlong, jint, jintArray);
+    Java_org_ws2811_jni_Ws2811Library_render (JNIEnv *, jclass, jlong, jint, jintArray);
 
     /*
      * Class:     org_ws2811_Ws2811Library
@@ -37,7 +37,7 @@ extern "C" {
      * Signature: (J)I
      */
     JNIEXPORT jint JNICALL
-    Java_org_ws2811_Ws2811Library_waitCompletion (JNIEnv *, jclass, jlong);
+    Java_org_ws2811_jni_Ws2811Library_waitCompletion (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }

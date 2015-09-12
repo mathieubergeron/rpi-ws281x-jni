@@ -5,8 +5,9 @@ import static org.ws2811.preconditions.Preconditions.*;
 
 import org.slf4j.*;
 import org.ws2811.exception.*;
+import org.ws2811.jni.*;
 
-public class SingleChannelWs2811 {
+public class NativeWs2811 implements Ws2811 {
     public static final int DEFAULT_FREQUENCY = 800000;
     public static final int DEFAULT_DMA_NUMBER = 5;
     public static final int DEFAULT_GPIO_NUMBER = 18;
@@ -32,7 +33,7 @@ public class SingleChannelWs2811 {
      * @param pixelCount total number of pixel (/ws2811 chips)
      * @throws DriverInitializationException
      */
-    public SingleChannelWs2811(int pixelCount) throws DriverInitializationException {
+    public NativeWs2811(int pixelCount) throws DriverInitializationException {
         this(DEFAULT_FREQUENCY, DEFAULT_DMA_NUMBER, new Ws2811Channel(DEFAULT_GPIO_NUMBER,
                                                                       DEFAULT_INVERT_VALUE,
                                                                       pixelCount,
@@ -45,8 +46,7 @@ public class SingleChannelWs2811 {
      * @param channel
      * @throws DriverInitializationException
      */
-    public SingleChannelWs2811(int frequency, int dmaNumber, Ws2811Channel channel)
-            throws DriverInitializationException {
+    public NativeWs2811(int frequency, int dmaNumber, Ws2811Channel channel) throws DriverInitializationException {
         between(frequency, 400000, 800000, "frequency");
         positive(dmaNumber, "dmaNumber");
         notNull(channel, "channel");
@@ -62,8 +62,21 @@ public class SingleChannelWs2811 {
         return mChannel;
     }
 
+    @Override
+    public void render(int[] pixels) throws RenderException {
+        int pixelCount = mChannel.getCount();
+        if (pixels.length != pixelCount)
+            throw new IllegalArgumentException(format("'pixels' length should be '%d' but is '%d'",
+                                                      pixelCount,
+                                                      pixels.length));
+
+        int result = Ws2811Library.render(mReference, pixels);
+        if (result != 0) throw new RenderException();
+    }
+
     // TODO: ws2811 is not intended to be used by multiple threads, but shutdown method will probably be called
     // by a VM shutdown hook. So, access to mReference should be thread safe. Will this cause performance issue?
+    @Override
     public void shutdown() {
         try {
             render(new int[mChannel.getCount()]);
@@ -76,17 +89,7 @@ public class SingleChannelWs2811 {
         mLog.info("Ws2811 library shut down");
     }
 
-    public void render(int[] pixels) throws RenderException {
-        int pixelCount = mChannel.getCount();
-        if (pixels.length != pixelCount)
-            throw new IllegalArgumentException(format("'pixels' length should be '%d' but is '%d'",
-                                                      pixelCount,
-                                                      pixels.length));
-
-        int result = Ws2811Library.render(mReference, pixels);
-        if (result != 0) throw new RenderException();
-    }
-
+    @Override
     public void waitCompletion() {
         Ws2811Library.waitCompletion(mReference);
     }
