@@ -55,7 +55,8 @@ public class NativeWs2811 implements Ws2811 {
         mChannel = channel;
 
         if (mReference <= 0)
-            throw new DriverInitializationException("Could not initialize WS2811 (native driver returned null)");
+            throw new DriverInitializationException(format("Could not initialize WS2811 - native driver returned invalid reference (%s)",
+                                                           mReference));
     }
 
     public Ws2811Channel getChannel() {

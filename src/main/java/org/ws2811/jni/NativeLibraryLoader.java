@@ -28,20 +28,20 @@ final class NativeLibraryLoader {
 
         LOGGER.debug("Attempting to extract and load [{}] from jar", path);
         try {
-            loadLibraryFromClasspath(path);
-            LOGGER.debug("Library [{}] loaded successfully", fileName);
+            String temporaryFile = loadLibraryFromClasspath(path);
+            LOGGER.debug("Library [{}] loaded successfully from file [{}]", fileName, temporaryFile);
         } catch (Exception | UnsatisfiedLinkError error) {
             LOGGER.error("Unable to load [{}] using path: [{}]", fileName, path, error);
         }
     }
 
-    private static void loadLibraryFromClasspath(String path) throws IOException {
+    private static String loadLibraryFromClasspath(String path) throws IOException {
         Path inputPath = Paths.get(path);
 
         String fileNameFull = inputPath.getFileName().toString();
-        int dotIndex = fileNameFull.indexOf('.');
+        int dotIndex = fileNameFull.lastIndexOf('.');
 
-        String fileName = fileNameFull.substring(0, dotIndex);
+        String fileName = fileNameFull.substring(0, dotIndex) + ".";
         String extension = fileNameFull.substring(dotIndex);
 
         Path target = Files.createTempFile(fileName, extension);
@@ -54,6 +54,8 @@ final class NativeLibraryLoader {
         }
 
         // Load the library
-        System.load(target.toAbsolutePath().toString());
+        String absolutePath = target.toAbsolutePath().toString();
+        System.load(absolutePath);
+        return absolutePath;
     }
 }
