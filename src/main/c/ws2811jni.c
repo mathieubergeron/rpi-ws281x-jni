@@ -43,7 +43,7 @@ Java_org_ws2811_jni_Ws2811Library_init (JNIEnv * env, jclass jc, jint frequency,
             };
     }
 
-    return ws2811_init(ledstring) == 0 ? (jlong)((long) ledstring) : (jlong) 0;
+    return ws2811_init(ledstring) == 0 ? (jlong) ledstring : (jlong) 0;
 }
 
 JNIEXPORT void JNICALL Java_org_ws2811_jni_Ws2811Library_fini(JNIEnv * env, jclass jc, jlong reference) {
