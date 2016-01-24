@@ -39,7 +39,7 @@ public class Ws2811Channel {
 
     @Override
     public String toString() {
-        return "Ws2811Channel [mGpio="
+        return "ws2811Channel [mGpio="
                + mGpio
                + ", mInvert="
                + mInvert

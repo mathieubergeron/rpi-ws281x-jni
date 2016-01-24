@@ -54,8 +54,9 @@ public class NativeWs2811 implements Ws2811 {
         mReference = Ws2811Library.init(frequency, dmaNumber, channel);
         mChannel = channel;
 
-        if (mReference <= 0)
-            throw new DriverInitializationException(format("Could not initialize WS2811 - native driver returned invalid reference (%s)",
+        mLog.debug("Native reference to ws2811 is [{}].", mReference);
+        if (mReference == 0)
+            throw new DriverInitializationException(format("Could not initialize ws2811 - native driver returned invalid reference (%s)",
                                                            mReference));
     }
 
@@ -87,7 +88,7 @@ public class NativeWs2811 implements Ws2811 {
 
         Ws2811Library.fini(mReference);
         mReference = 0;
-        mLog.info("Ws2811 library shut down");
+        mLog.info("ws2811 library shut down");
     }
 
     @Override
