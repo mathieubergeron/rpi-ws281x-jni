@@ -76,8 +76,6 @@ public class NativeWs2811 implements Ws2811 {
         if (result != 0) throw new RenderException();
     }
 
-    // TODO: ws2811 is not intended to be used by multiple threads, but shutdown method will probably be called
-    // by a VM shutdown hook. So, access to mReference should be thread safe. Will this cause performance issue?
     @Override
     public void shutdown() {
         try {
