@@ -14,13 +14,13 @@ REMOTE_DIR=/root/rpi-ws281x-jni
 if [ "$1" != "install-only" ]
 then
     echo Syncing remote files
-    ssh $REMOTE << EOF
+    ssh root@$REMOTE << EOF
         rm -rf $REMOTE_DIR
 EOF
     rsync . -rav -e ssh --exclude='.git/*' --exclude='target/*' root@$REMOTE:$REMOTE_DIR
 
     echo Packaging jar
-    ssh $REMOTE << EOF
+    ssh root@$REMOTE << EOF
         cd $REMOTE_DIR
         mvn install
 EOF
